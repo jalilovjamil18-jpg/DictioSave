@@ -1,0 +1,790 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#7e22ce">
+  <meta name="description" content="DictioSave - Your personal vocabulary learning platform. Save words, practice flashcards and test your knowledge.">
+
+  <title>DictioSave | Learn Every Day</title>
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+      <a class="brand"
+         href="./"
+         onclick="event.preventDefault(); showPage('words')"
+         aria-label="DictioSave Home">
+
+        <span class="brand-icon">D</span>
+
+        <span>
+          Dictio<span class="brand-light">Save</span>
+        </span>
+
+      </a>
+
+      <!-- USER PROFILE -->
+      <div class="user-profile">
+
+        <div class="avatar">J</div>
+
+        <div>
+          <strong>My Workspace</strong>
+          <small>Personal account</small>
+        </div>
+
+      </div>
+
+      <p class="menu-label">MENU</p>
+
+      <!-- NAVIGATION -->
+      <nav class="navigation" aria-label="Main navigation">
+
+        <button
+          type="button"
+          class="nav-item active"
+          data-page="words"
+          onclick="showPage('words')">
+
+          <span>▤</span>
+          My Words
+
+        </button>
+
+        <button
+          type="button"
+          class="nav-item"
+          data-page="flashcards"
+          onclick="showPage('flashcards')">
+
+          <span>▣</span>
+          Flashcards
+
+        </button>
+
+        <button
+          type="button"
+          class="nav-item"
+          data-page="quiz"
+          onclick="showPage('quiz')">
+
+          <span>◎</span>
+          Quiz
+
+        </button>
+
+        <button
+          type="button"
+          class="nav-item"
+          data-page="stats"
+          onclick="showPage('stats')">
+
+          <span>▥</span>
+          Statistics
+
+        </button>
+
+      </nav>
+
+      <!-- SIDEBAR BOTTOM -->
+      <div class="sidebar-bottom">
+
+        <div class="tip-card">
+
+          <div class="tip-icon">✦</div>
+
+          <strong>Keep Learning!</strong>
+
+          <p>
+            Learn a few new words every day
+            and improve your vocabulary.
+          </p>
+
+        </div>
+
+        <button
+          type="button"
+          class="nav-item"
+          data-page="settings"
+          onclick="showPage('settings')">
+
+          <span>⚙</span>
+          Settings
+
+        </button>
+
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+
+        <button
+          type="button"
+          class="mobile-menu"
+          onclick="toggleSidebar()"
+          aria-label="Open navigation menu">
+
+          ☰
+
+        </button>
+
+        <div class="breadcrumb">
+
+          Workspace
+
+          <span>/</span>
+
+          <b id="breadcrumb">My Words</b>
+
+        </div>
+
+        <div class="top-right">
+
+          <span class="online-dot"></span>
+
+          <span class="online-text">
+            Your data is saved
+          </span>
+
+          <div class="top-avatar">J</div>
+
+        </div>
+
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <div class="content">
+
+        <!-- ============================= -->
+        <!-- MY WORDS -->
+        <!-- ============================= -->
+
+        <section
+          class="page active"
+          id="page-words">
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                YOUR VOCABULARY
+              </span>
+
+              <h1>
+                My Words
+                <span class="heading-icon">▤</span>
+              </h1>
+
+              <p class="subtitle">
+                Build your vocabulary, one word at a time.
+              </p>
+
+            </div>
+
+            <button
+              type="button"
+              class="primary-btn"
+              onclick="openModal()">
+
+              <span>＋</span>
+              Add New Word
+
+            </button>
+
+          </div>
+
+          <!-- WORD STATISTICS -->
+          <div class="stats-grid">
+
+            <div class="mini-stat">
+
+              <div class="stat-icon purple">▤</div>
+
+              <div>
+                <small>Total Words</small>
+                <h2 id="totalWords">0</h2>
+              </div>
+
+            </div>
+
+            <div class="mini-stat">
+
+              <div class="stat-icon green">✓</div>
+
+              <div>
+                <small>Learned</small>
+                <h2 id="learnedWords">0</h2>
+              </div>
+
+            </div>
+
+            <div class="mini-stat">
+
+              <div class="stat-icon orange">◷</div>
+
+              <div>
+                <small>To Learn</small>
+                <h2 id="remainingWords">0</h2>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- SEARCH AND FILTER -->
+          <div class="toolbar">
+
+            <div class="search-box">
+
+              <span>⌕</span>
+
+              <input
+                type="search"
+                id="searchInput"
+                placeholder="Search words or translations..."
+                aria-label="Search vocabulary"
+                autocomplete="off"
+                oninput="renderWords()">
+
+            </div>
+
+            <select
+              id="filterWords"
+              aria-label="Filter vocabulary"
+              onchange="renderWords()">
+
+              <option value="all">All Words</option>
+              <option value="learned">Learned</option>
+              <option value="learning">Learning</option>
+
+            </select>
+
+          </div>
+
+          <!-- VOCABULARY LIST -->
+          <div class="section-title">
+
+            <h3>Vocabulary List</h3>
+
+            <span id="wordCount">0 words</span>
+
+          </div>
+
+          <div
+            class="word-grid"
+            id="wordGrid"
+            aria-live="polite">
+
+          </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- FLASHCARDS -->
+        <!-- ============================= -->
+
+        <section
+          class="page"
+          id="page-flashcards">
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                MEMORY TRAINING
+              </span>
+
+              <h1>Flashcards</h1>
+
+              <p class="subtitle">
+                Flip cards and memorize your vocabulary.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="learning-area">
+
+            <div class="progress-info">
+
+              <span id="flashPosition">
+                0 / 0
+              </span>
+
+              <span>
+                Tap the card to flip
+              </span>
+
+            </div>
+
+            <div class="progress-track">
+
+              <div id="flashProgress"></div>
+
+            </div>
+
+            <div
+              class="flashcard"
+              id="flashcard"
+              onclick="flipCard()"
+              role="button"
+              tabindex="0"
+              aria-label="Flip vocabulary flashcard"
+              onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();flipCard()}">
+
+              <span
+                class="card-label"
+                id="flashLabel">
+
+                ENGLISH WORD
+
+              </span>
+
+              <h2 id="flashWord">
+                No words yet
+              </h2>
+
+              <p id="flashTranslation">
+                Add words to start learning
+              </p>
+
+              <span class="flip-hint">
+                ↻ Click to flip
+              </span>
+
+            </div>
+
+            <div class="flash-controls">
+
+              <button
+                type="button"
+                class="secondary-btn"
+                onclick="previousCard()">
+
+                ← Previous
+
+              </button>
+
+              <button
+                type="button"
+                class="primary-btn"
+                onclick="nextCard()">
+
+                Next →
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- QUIZ -->
+        <!-- ============================= -->
+
+        <section
+          class="page"
+          id="page-quiz">
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                TEST YOUR KNOWLEDGE
+              </span>
+
+              <h1>Vocabulary Quiz</h1>
+
+              <p class="subtitle">
+                Choose the correct translation.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="quiz-area">
+
+            <div class="quiz-top">
+
+              <span id="quizNumber">
+                Question 0 / 0
+              </span>
+
+              <span id="quizScore">
+                Score: 0
+              </span>
+
+            </div>
+
+            <div class="progress-track">
+
+              <div id="quizProgress"></div>
+
+            </div>
+
+            <div id="quizContent">
+
+              <div class="quiz-question">
+
+                <span class="eyebrow">
+                  TRANSLATE THIS WORD
+                </span>
+
+                <h2 id="quizWord">
+                  Ready to start?
+                </h2>
+
+                <p>
+                  Select the correct translation below.
+                </p>
+
+              </div>
+
+              <div
+                class="answers"
+                id="quizAnswers">
+
+              </div>
+
+              <div class="quiz-footer">
+
+                <span id="quizFeedback">
+                  Your progress will appear here.
+                </span>
+
+                <button
+                  type="button"
+                  class="primary-btn"
+                  id="nextQuestion"
+                  onclick="nextQuestion()"
+                  disabled>
+
+                  Next →
+
+                </button>
+
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              class="primary-btn"
+              id="startQuiz"
+              onclick="startQuiz()">
+
+              Start Quiz
+
+            </button>
+
+          </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- STATISTICS -->
+        <!-- ============================= -->
+
+        <section
+          class="page"
+          id="page-stats">
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                YOUR PROGRESS
+              </span>
+
+              <h1>Statistics</h1>
+
+              <p class="subtitle">
+                See how far you've come.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="stats-grid">
+
+            <div class="mini-stat">
+
+              <div class="stat-icon purple">▤</div>
+
+              <div>
+                <small>Total Vocabulary</small>
+                <h2 id="statsTotal">0</h2>
+              </div>
+
+            </div>
+
+            <div class="mini-stat">
+
+              <div class="stat-icon green">✓</div>
+
+              <div>
+                <small>Learned Words</small>
+                <h2 id="statsLearned">0</h2>
+              </div>
+
+            </div>
+
+            <div class="mini-stat">
+
+              <div class="stat-icon orange">◎</div>
+
+              <div>
+                <small>Quiz Correct Answers</small>
+                <h2 id="statsCorrect">0</h2>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="panel progress-panel">
+
+            <h3>Learning Progress</h3>
+
+            <p class="subtitle">
+              Your learned vocabulary percentage.
+            </p>
+
+            <div class="big-progress">
+
+              <div id="statsProgress"></div>
+
+            </div>
+
+            <h2 id="statsPercent">0%</h2>
+
+          </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- SETTINGS -->
+        <!-- ============================= -->
+
+        <section
+          class="page"
+          id="page-settings">
+
+          <div class="page-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                PREFERENCES
+              </span>
+
+              <h1>Settings</h1>
+
+              <p class="subtitle">
+                Manage your vocabulary data.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="panel settings-panel">
+
+            <h3>Data Management</h3>
+
+            <p>
+              Your vocabulary is currently saved
+              in this browser.
+            </p>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              onclick="exportWords()">
+
+              ↓ Export Vocabulary (JSON)
+
+            </button>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              onclick="importWords()">
+
+              ↑ Import Vocabulary (JSON)
+
+            </button>
+
+            <input
+              type="file"
+              id="importFile"
+              accept=".json,application/json"
+              hidden
+              onchange="handleImport(event)">
+
+            <hr>
+
+            <h3>Reset Data</h3>
+
+            <p>
+              Permanently delete all saved vocabulary
+              from this browser.
+            </p>
+
+            <button
+              type="button"
+              class="danger-btn"
+              onclick="clearWords()">
+
+              Delete All Words
+
+            </button>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- FOOTER -->
+      <footer>
+        © 2026 DictioSave. Made for better learning.
+      </footer>
+
+    </main>
+
+  </div>
+
+
+  <!-- ============================= -->
+  <!-- ADD / EDIT WORD MODAL -->
+  <!-- ============================= -->
+
+  <div
+    class="modal-overlay"
+    id="wordModal"
+    onclick="overlayClose(event)"
+    role="presentation">
+
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle">
+
+      <div class="modal-header">
+
+        <div>
+
+          <span class="eyebrow">
+            VOCABULARY
+          </span>
+
+          <h2 id="modalTitle">
+            Add New Word
+          </h2>
+
+        </div>
+
+        <button
+          type="button"
+          class="close-btn"
+          onclick="closeModal()"
+          aria-label="Close dialog">
+
+          ×
+
+        </button>
+
+      </div>
+
+      <form
+        id="wordForm"
+        onsubmit="saveWord(event)">
+
+        <input
+          type="hidden"
+          id="editId">
+
+        <label for="englishWord">
+          English Word
+        </label>
+
+        <input
+          type="text"
+          id="englishWord"
+          placeholder="e.g. Beautiful"
+          maxlength="80"
+          autocomplete="off"
+          required>
+
+        <label for="uzbekWord">
+          Translation
+        </label>
+
+        <input
+          type="text"
+          id="uzbekWord"
+          placeholder="Enter the word meaning"
+          maxlength="120"
+          autocomplete="off"
+          required>
+
+        <label for="exampleWord">
+          Example Sentence (Optional)
+        </label>
+
+        <textarea
+          id="exampleWord"
+          placeholder="e.g. This is a beautiful day."
+          rows="3"
+          maxlength="300"></textarea>
+
+        <button
+          type="submit"
+          class="primary-btn full-btn">
+
+          Save Word
+
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- APPLICATION JAVASCRIPT -->
+  <script src="./app.js"></script>
+
+</body>
+</html>
